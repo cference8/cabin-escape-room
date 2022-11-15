@@ -52,7 +52,7 @@
       <h3 class="float-md-start mb-0">Cabin Escape Room</h3>
       <nav class="nav nav-masthead justify-content-center float-md-end">
         <a class="nav-link" href="home">Home</a>
-        <a class="nav-link active" aria-current="page" href="score-form">Score Form</a>
+        <a class="nav-link active" aria-current="page" href="scoreForm">Score Form</a>
         <a class="nav-link" href="#">Contact</a>
       </nav>
 
@@ -72,14 +72,17 @@
                     </form>
                 </span>
       <span sec:authorize="isAnonymous()">
-                    <a href="/createAccount">Create Account</a> &nbsp;&nbsp;&nbsp;
-                    <a th:href="@{/login}">Log in</a>
+                    <a class="btn btn-primary" href="#">Create Account</a> &nbsp;&nbsp;&nbsp;
+                    <a class="btn btn-primary" th:href="@{/login}">Log in</a>
                 </span>
     </div>
   </header>
   <main class="px-3">
     <div class="container">
-      <form>
+      <form action="addScoreForm" method="POST" >
+        <input type="hidden"
+               th:name="${_csrf.parameterName}"
+               th:value="${_csrf.token}"/>
         <div class="banner">
           <h1 class="text-center">Escape Room Score Form</h1>
         </div>
@@ -92,24 +95,24 @@
               <input id="name1" type="text" name="name1" class="form-control" placeholder=" Name" required/>
             </div>
             <div class="row">
-              <label for="name1" class="col-form-label"> Partcipant 2<span>*</span></label>
-              <input id="name1" type="text" name="name1" class="form-control" placeholder=" Name" required/>
+              <label for="name2" class="col-form-label"> Partcipant 2<span>*</span></label>
+              <input id="name2" type="text" name="name2" class="form-control" placeholder=" Name" required/>
             </div>
             <div class="row">
-              <label for="name1" class="col-form-label"> Partcipant 3<span>*</span></label>
-              <input id="name1" type="text" name="name1" class="form-control" placeholder=" Name" required/>
+              <label for="name3" class="col-form-label"> Partcipant 3<span>*</span></label>
+              <input id="name3" type="text" name="name3" class="form-control" placeholder=" Name" required/>
             </div>
             <div class="row">
-              <label for="name1" class="col-form-label"> Partcipant 4</label>
-              <input id="name1" type="text" name="name1" class="form-control" placeholder=" Name"/>
+              <label for="name4" class="col-form-label"> Partcipant 4</label>
+              <input id="name4" type="text" name="name4" class="form-control" placeholder=" Name"/>
             </div>
             <div class="row">
-              <label for="name1" class="col-form-label"> Partcipant 5</label>
-              <input id="name1" type="text" name="name1" class="form-control" placeholder=" Name"/>
+              <label for="name5" class="col-form-label"> Partcipant 5</label>
+              <input id="name5" type="text" name="name5" class="form-control" placeholder=" Name"/>
             </div>
             <div class="row pb-3">
-              <label for="name1" class="col-form-label"> Partcipant 6</label>
-              <input id="name1" type="text" name="name1" class="form-control" placeholder=" Name"/>
+              <label for="name6" class="col-form-label"> Partcipant 6</label>
+              <input id="name6" type="text" name="name6" class="form-control" placeholder=" Name"/>
             </div>
           </div>
         </fieldset>
@@ -119,15 +122,15 @@
           <div class="col-6 mx-auto">
             <div class="row">
               <label for="activity">Activity Name<span>*</span></label>
-              <input id="activity" type="text" name="activity" class="form-control" required/>
+              <input id="activity" type="text" name="activity_name" class="form-control" required/>
             </div>
             <div class="row">
               <label for="cdate">Completion Date<span>*</span></label>
-              <input id="cdate" type="date" name="cdate" class="form-control" required/>
+              <input id="cdate" type="date" name="date" class="form-control" required/>
             </div>
             <div class="row">
               <label for="ctime">Completion Time<span>*</span></label>
-              <input id="ctime" type="text" name="ctime" placeholder="time in minutes" class="form-control" required/>
+              <input id="ctime" type="text" name="minutes" placeholder="time in minutes" class="form-control" required/>
             </div>
             <div class="row">
               <p>Number of help cards used</p>
@@ -140,7 +143,7 @@
               </select>
             </div>
 
-            <button class="btn btn-primary m-3" href="#">Submit</button>
+            <button class="btn btn-primary m-3" type="submit">Submit</button>
           </div>
         </fieldset>
       </form>

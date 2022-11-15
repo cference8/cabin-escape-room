@@ -4,21 +4,6 @@ create database Cabin_App;
 
 use Cabin_App;
 
-create table `score_form`(
-`id` bigint primary key auto_increment,
-`name_one` varchar(50),
-`name_two` varchar(50),
-`name_three` varchar(50),
-`name_four` varchar(50),
-`name_five` varchar(50),
-`name_six` varchar(50),
-`activity_name` varchar(100),
-`completion_date` date,
-`completion_time` int,
-`help_cards` int,
-`stars` int
-);
-
 create table `users`(
 `user_id` bigint primary key auto_increment,
 `username` varchar(30),
@@ -34,6 +19,23 @@ create table `users`(
 create table `roles` (
 	`role_id` bigint primary key auto_increment,
     `name` varchar(45) NOT NULL
+);
+
+create table `score_form`(
+`id` bigint primary key auto_increment,
+`name_one` varchar(50),
+`name_two` varchar(50),
+`name_three` varchar(50),
+`name_four` varchar(50),
+`name_five` varchar(50),
+`name_six` varchar(50),
+`activity_name` varchar(100),
+`completion_date` date,
+`completion_time` int,
+`help_cards` int,
+`stars` int,
+`user_id` bigint not null,
+foreign key (`user_id`) references `users`(`user_id`)
 );
 
 create table `users_roles` (
@@ -57,3 +59,12 @@ insert into `users_roles` (`user_id`, `role_id`) VALUES
 						(1,1),
                         (1,2),
                         (2,2);
+
+insert into `score_form` (`name_one`, `name_two`, `name_three`, 
+						`name_four`, `name_five`, `name_six`, 
+                        `activity_name`, `completion_date`, `completion_time`, `help_cards`, `stars`, `user_id`) values
+                        ('Maggie','Willy','Lochness','galager','shelby','mommy','adandon cabin', '2022-11-11', 136, 3, 2, 1),
+                        ('chris','ellen','becky','john','chooley','penny','adandon cabin', '2022-11-11', 136, 3, 2, 2);
+
+use cabin_app;
+select * from score_form;

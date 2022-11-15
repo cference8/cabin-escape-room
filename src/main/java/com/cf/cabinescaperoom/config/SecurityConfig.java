@@ -33,6 +33,7 @@ public class SecurityConfig {
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
         return http.authorizeRequests()
                 .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
+                .antMatchers("/viewScores", "/scoreForm", "/addScoreForm", "/form").access("hasRole('ROLE_USER')")
                 .antMatchers("/", "/home", "/createAccount", "/login", "/oauth2/**").permitAll()
                 .antMatchers("/css/**", "/js/**", "/fonts/**", "/login-style/**", "/images/**", "/vendor/**").permitAll()
                 .anyRequest().hasRole("USER")
