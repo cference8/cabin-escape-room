@@ -17,84 +17,85 @@ public class ScoreFormService {
 
     public ScoreForm addScoreForm(ScoreForm formData) {
 
-        ScoreForm toReturn = new ScoreForm();
+        int stars;
 
         if (formData.getMinutes() < 60) {
-            toReturn = lessThanSixty(formData);
+            stars = lessThanSixty(formData);
+            formData.setStars(stars);
         } else if (formData.getMinutes() < 90){
-            toReturn = lessThanNinety(formData);
+            stars = lessThanNinety(formData);
+            formData.setStars(stars);
         } else if (formData.getMinutes() < 120){
-            toReturn = lessThanOneTwenty(formData);
+            stars = lessThanOneTwenty(formData);
+            formData.setStars(stars);
         } else if (formData.getMinutes() > 120){
-            toReturn = greaterThanOneTwenty(formData);
+            stars = greaterThanOneTwenty(formData);
+            formData.setStars(stars);
         }
 
-        if(toReturn != null){
-            return repo.save(toReturn);
-        }else {
-            return repo.save(formData);
-        }
+        return repo.save(formData);
 
     }
 
-    private ScoreForm greaterThanOneTwenty(ScoreForm formData) {
+    private int greaterThanOneTwenty(ScoreForm formData) {
+        int stars = 0;
+
         if(formData.getMinutes() > 120 && formData.getHelp_cards() == 0)
-            formData.setStars(7);
+            stars = 7;
         else if (formData.getMinutes() > 120 && formData.getHelp_cards() == 1)
-            formData.setStars(5);
+            stars = 5;
         else if (formData.getMinutes() > 120 && formData.getHelp_cards() == 2)
-            formData.setStars(4);
+            stars = 4;
         else if (formData.getMinutes() > 120 && formData.getHelp_cards() == 3)
-            formData.setStars(2);
+            stars = 2;
         else if (formData.getMinutes() > 120 && formData.getHelp_cards() == 4)
-            formData.setStars(1);
-
-        return formData;
+            stars = 1;
+        return stars;
     }
 
-    private ScoreForm lessThanOneTwenty(ScoreForm formData) {
+    private int lessThanOneTwenty(ScoreForm formData) {
+        int stars = 0;
         if(formData.getMinutes() < 120 && formData.getHelp_cards() == 0)
-            formData.setStars(8);
+            stars = 8;
         else if (formData.getMinutes() < 120 && formData.getHelp_cards() == 1)
-            formData.setStars(6);
+            stars = 6;
         else if (formData.getMinutes() < 120 && formData.getHelp_cards() == 2)
-            formData.setStars(5);
+            stars = 5;
         else if (formData.getMinutes() < 120 && formData.getHelp_cards() == 3)
-            formData.setStars(3);
+            stars = 3;
         else if (formData.getMinutes() < 120 && formData.getHelp_cards() == 4)
-            formData.setStars(2);
-
-        return formData;
+            stars = 2;
+        return stars;
     }
 
-    private ScoreForm lessThanNinety(ScoreForm formData) {
+    private int lessThanNinety(ScoreForm formData) {
+        int stars = 0;
         if(formData.getMinutes() < 90 && formData.getHelp_cards() == 0)
-            formData.setStars(9);
+            stars = 9;
         else if (formData.getMinutes() < 90 && formData.getHelp_cards() == 1)
-            formData.setStars(7);
+            stars = 7;
         else if (formData.getMinutes() < 90 && formData.getHelp_cards() == 2)
-            formData.setStars(6);
+            stars = 6;
         else if (formData.getMinutes() < 90 && formData.getHelp_cards() == 3)
-            formData.setStars(4);
+            stars = 4;
         else if (formData.getMinutes() < 90 && formData.getHelp_cards() == 4)
-            formData.setStars(3);
-
-        return formData;
+            stars = 3;
+        return stars;
     }
 
-    private ScoreForm lessThanSixty(ScoreForm formData) {
+    private int lessThanSixty(ScoreForm formData) {
+        int stars = 0;
         if(formData.getMinutes() < 60 && formData.getHelp_cards() == 0)
-            formData.setStars(10);
+            stars = 10;
         else if (formData.getMinutes() < 60 && formData.getHelp_cards() == 1)
-            formData.setStars(8);
+            stars = 8;
         else if (formData.getMinutes() < 60 && formData.getHelp_cards() == 2)
-            formData.setStars(7);
+            stars = 7;
         else if (formData.getMinutes() < 60 && formData.getHelp_cards() == 3)
-            formData.setStars(5);
+            stars = 5;
         else if (formData.getMinutes() < 60 && formData.getHelp_cards() == 4)
-            formData.setStars(4);
-
-        return formData;
+            stars = 4;
+        return stars;
     }
 
     public ScoreForm getById(long scoreFormId) {
@@ -103,5 +104,40 @@ public class ScoreFormService {
 
     public List<ScoreForm> getAll() {
         return (List<ScoreForm>) repo.findAll();
+    }
+
+    public void editScoreForm(ScoreForm scoreForm) {
+        ScoreForm update = repo.findById(scoreForm.getId()).orElse(null);
+        int stars;
+
+        if (scoreForm.getMinutes() < 60) {
+            stars = lessThanSixty(scoreForm);
+            scoreForm.setStars(stars);
+        } else if (scoreForm.getMinutes() < 90){
+            stars = lessThanNinety(scoreForm);
+            scoreForm.setStars(stars);
+        } else if (scoreForm.getMinutes() < 120){
+            stars = lessThanOneTwenty(scoreForm);
+            scoreForm.setStars(stars);
+        } else if (scoreForm.getMinutes() > 120){
+            stars = greaterThanOneTwenty(scoreForm);
+            scoreForm.setStars(stars);
+        }
+
+        if (update != null) {
+            update.setName1(scoreForm.getName1());
+            update.setName2(scoreForm.getName2());
+            update.setName2(scoreForm.getName3());
+            update.setName2(scoreForm.getName4());
+            update.setName2(scoreForm.getName5());
+            update.setName2(scoreForm.getName6());
+            update.setActivity_name(scoreForm.getActivity_name());
+            update.setCompletion_date(scoreForm.getCompletion_date());
+            update.setMinutes(scoreForm.getMinutes());
+            update.setHelp_cards(scoreForm.getHelp_cards());
+            update.setStars(scoreForm.getStars());
+        }
+
+        repo.save(scoreForm);
     }
 }

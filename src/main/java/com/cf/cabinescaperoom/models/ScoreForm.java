@@ -1,8 +1,10 @@
 package com.cf.cabinescaperoom.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -35,7 +37,8 @@ public class ScoreForm {
     private String activity_name;
 
     @Column(name = "completion_date")
-    private LocalDate date;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate completion_date;
 
     @Column(name = "completion_time")
     private int minutes;

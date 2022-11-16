@@ -31,6 +31,7 @@
         background-position: center;
         background-repeat: no-repeat;
         background-size: cover;
+        background-attachment: fixed;
       }
 
       @media (min-width: 768px) {
@@ -54,6 +55,7 @@
         <a class="nav-link" href="home">Home</a>
         <a class="nav-link active" aria-current="page" href="scoreForm">Score Form</a>
         <a class="nav-link" href="#">Contact</a>
+        <a class="nav-link" href="admin" sec:authorize="hasRole('ROLE_ADMIN')">Admin</a>
       </nav>
 
     </div>
@@ -126,15 +128,15 @@
             </div>
             <div class="row">
               <label for="cdate">Completion Date<span>*</span></label>
-              <input id="cdate" type="date" name="date" class="form-control" required/>
+              <input id="cdate" type="date" name="completion_date" class="form-control" required/>
             </div>
             <div class="row">
               <label for="ctime">Completion Time<span>*</span></label>
               <input id="ctime" type="text" name="minutes" placeholder="time in minutes" class="form-control" required/>
             </div>
             <div class="row">
-              <p>Number of help cards used</p>
-              <select type="dropdown" name="help_cards" class="form-control" required>
+              <label for="cards">Number of help cards used</label>
+              <select id="cards" type="dropdown" name="help_cards" class="form-control" required>
                 <option value="0">No cards</option>
                 <option value="1" >1-2 cards</option>
                 <option value="2">3-5 cards</option>
@@ -157,8 +159,6 @@
     </a>
   </footer>
 </div>
-
-
 
 </body>
 </html>

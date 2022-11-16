@@ -31,6 +31,7 @@
         background-position: center;
         background-repeat: no-repeat;
         background-size: cover;
+        background-attachment: fixed;
       }
 
       @media (min-width: 768px) {
@@ -54,6 +55,7 @@
         <a class="nav-link active" aria-current="page" href="home">Home</a>
         <a class="nav-link" href="scoreForm">Score Form</a>
         <a class="nav-link" href="#">Contact</a>
+        <a class="nav-link" href="admin" sec:authorize="hasRole('ROLE_ADMIN')">Admin</a>
       </nav>
     </div>
     <div class="row m-3 mx-auto">
@@ -96,7 +98,7 @@
             <tr th:each="currentScore : ${scores}">
                 <th scope="row" th:text="${currentScore.id}"></th>
                 <td th:text="${currentScore.name1}"></td>
-                <td th:text="${#temporals.format(currentScore.date, 'MMM-dd-yyyy')}"></td>
+                <td th:text="${#temporals.format(currentScore.completion_date, 'MMM-dd-yyyy')}"></td>
                 <td th:text="${currentScore.minutes}"></td>
                 <td th:text="${currentScore.stars}"></td>
                 <td><a href="#" th:href="@{/scoreDetail(id=${currentScore.id})}">Details</a></td>

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
@@ -40,9 +41,9 @@ public class ScoreFormController {
     @PostMapping("addScoreForm")
     public String addScoreForm(HttpServletRequest request) {
 
+        // Get user information from session
         org.springframework.security.core.userdetails.User user = (org.springframework.security.core.userdetails.User) SecurityContextHolder
                 .getContext().getAuthentication().getPrincipal();
-
         User scoreFormUser = userService.getUserByUsername(user.getUsername());
 
         String name1 = request.getParameter("name1");
@@ -52,7 +53,7 @@ public class ScoreFormController {
         String name5 = request.getParameter("name5");
         String name6 = request.getParameter("name6");
         String activity_name = request.getParameter("activity_name");
-        LocalDate date = LocalDate.parse(request.getParameter("date"));
+        LocalDate date = LocalDate.parse(request.getParameter("completion_date"));
         int minutes = Integer.parseInt(request.getParameter("minutes"));
         int help_cards = Integer.parseInt(request.getParameter("help_cards"));
 
@@ -64,14 +65,37 @@ public class ScoreFormController {
         scoreForm.setName5(name5);
         scoreForm.setName6(name6);
         scoreForm.setActivity_name(activity_name);
-        scoreForm.setDate(date);
+        scoreForm.setCompletion_date(date);
         scoreForm.setMinutes(minutes);
         scoreForm.setHelp_cards(help_cards);
         scoreForm.setUser(scoreFormUser);
 
         service.addScoreForm(scoreForm);
 
-        return "redirect:/form";
+        return "redirect:/viewAllScores";
+    }
+
+    @GetMapping("editScoreForm")
+    public String editScoreForm(HttpServletRequest request, Model model) {
+        int id = Integer.parseInt(request.getParameter("id"));
+        ScoreForm scoreForm = service.getById(id);
+        System.out.println(scoreForm.getCompletion_date());
+        model.addAttribute("scoreForm", scoreForm);
+        return "editScoreForm";
+    }
+
+    @PutMapping("editScoreForm")
+    public String preformEditScoreForm(ScoreForm scoreForm, HttpServletRequest request) {
+
+        org.springframework.security.core.userdetails.User user = (org.springframework.security.core.userdetails.User) SecurityContextHolder
+                .getContext().getAuthentication().getPrincipal();
+        User scoreFormUser = userService.getUserByUsername(user.getUsername());
+
+        scoreForm.setUser(scoreFormUser);
+
+        service.editScoreForm(scoreForm);
+
+        return "redirect:/viewAllScores";
     }
 
     @GetMapping("viewAllScores")
