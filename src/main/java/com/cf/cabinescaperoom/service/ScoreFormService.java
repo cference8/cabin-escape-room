@@ -32,9 +32,56 @@ public class ScoreFormService {
             stars = greaterThanOneTwenty(formData);
             formData.setStars(stars);
         }
-
         return repo.save(formData);
+    }
 
+    public void editScoreForm(ScoreForm scoreForm) {
+        ScoreForm update = repo.findById(scoreForm.getId()).orElse(null);
+        int stars;
+
+        if (scoreForm.getMinutes() < 60) {
+            stars = lessThanSixty(scoreForm);
+            scoreForm.setStars(stars);
+        } else if (scoreForm.getMinutes() < 90){
+            stars = lessThanNinety(scoreForm);
+            scoreForm.setStars(stars);
+        } else if (scoreForm.getMinutes() < 120){
+            stars = lessThanOneTwenty(scoreForm);
+            scoreForm.setStars(stars);
+        } else if (scoreForm.getMinutes() > 120){
+            stars = greaterThanOneTwenty(scoreForm);
+            scoreForm.setStars(stars);
+        }
+
+        if (update != null) {
+            update.setName1(scoreForm.getName1());
+            update.setName2(scoreForm.getName2());
+            update.setName2(scoreForm.getName3());
+            update.setName2(scoreForm.getName4());
+            update.setName2(scoreForm.getName5());
+            update.setName2(scoreForm.getName6());
+            update.setActivity_name(scoreForm.getActivity_name());
+            update.setCompletion_date(scoreForm.getCompletion_date());
+            update.setMinutes(scoreForm.getMinutes());
+            update.setHelp_cards(scoreForm.getHelp_cards());
+            update.setStars(scoreForm.getStars());
+            repo.save(update);
+        } else {
+            repo.save(scoreForm);
+        }
+
+    }
+
+    public void deleteScoreForm(long id){
+        repo.findById(id).ifPresent(toDelete -> repo.delete(toDelete));
+    }
+
+    public ScoreForm getById(long scoreFormId) {
+        return repo.findById(scoreFormId).orElse(null);
+    }
+
+    public List<ScoreForm> getAll() {
+        return (List<ScoreForm>) repo.findAll();
     }
 
     private int greaterThanOneTwenty(ScoreForm formData) {
@@ -96,48 +143,5 @@ public class ScoreFormService {
         else if (formData.getMinutes() < 60 && formData.getHelp_cards() == 4)
             stars = 4;
         return stars;
-    }
-
-    public ScoreForm getById(long scoreFormId) {
-        return repo.findById(scoreFormId).orElse(null);
-    }
-
-    public List<ScoreForm> getAll() {
-        return (List<ScoreForm>) repo.findAll();
-    }
-
-    public void editScoreForm(ScoreForm scoreForm) {
-        ScoreForm update = repo.findById(scoreForm.getId()).orElse(null);
-        int stars;
-
-        if (scoreForm.getMinutes() < 60) {
-            stars = lessThanSixty(scoreForm);
-            scoreForm.setStars(stars);
-        } else if (scoreForm.getMinutes() < 90){
-            stars = lessThanNinety(scoreForm);
-            scoreForm.setStars(stars);
-        } else if (scoreForm.getMinutes() < 120){
-            stars = lessThanOneTwenty(scoreForm);
-            scoreForm.setStars(stars);
-        } else if (scoreForm.getMinutes() > 120){
-            stars = greaterThanOneTwenty(scoreForm);
-            scoreForm.setStars(stars);
-        }
-
-        if (update != null) {
-            update.setName1(scoreForm.getName1());
-            update.setName2(scoreForm.getName2());
-            update.setName2(scoreForm.getName3());
-            update.setName2(scoreForm.getName4());
-            update.setName2(scoreForm.getName5());
-            update.setName2(scoreForm.getName6());
-            update.setActivity_name(scoreForm.getActivity_name());
-            update.setCompletion_date(scoreForm.getCompletion_date());
-            update.setMinutes(scoreForm.getMinutes());
-            update.setHelp_cards(scoreForm.getHelp_cards());
-            update.setStars(scoreForm.getStars());
-        }
-
-        repo.save(scoreForm);
     }
 }

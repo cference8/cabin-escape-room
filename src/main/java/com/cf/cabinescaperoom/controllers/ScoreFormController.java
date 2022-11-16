@@ -9,12 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -79,13 +78,12 @@ public class ScoreFormController {
     public String editScoreForm(HttpServletRequest request, Model model) {
         int id = Integer.parseInt(request.getParameter("id"));
         ScoreForm scoreForm = service.getById(id);
-        System.out.println(scoreForm.getCompletion_date());
         model.addAttribute("scoreForm", scoreForm);
         return "editScoreForm";
     }
 
-    @PutMapping("editScoreForm")
-    public String preformEditScoreForm(ScoreForm scoreForm, HttpServletRequest request) {
+    @PostMapping("editScoreForm")
+    public String preformEditScoreForm(ScoreForm scoreForm) {
 
         org.springframework.security.core.userdetails.User user = (org.springframework.security.core.userdetails.User) SecurityContextHolder
                 .getContext().getAuthentication().getPrincipal();
@@ -96,6 +94,41 @@ public class ScoreFormController {
         service.editScoreForm(scoreForm);
 
         return "redirect:/viewAllScores";
+    }
+
+    @GetMapping("viewDetails")
+    public String viewDetails(long id, Model model) {
+        ScoreForm scoreForm = service.getById(id);
+        List<ScoreForm> scoreFormList = service.getAll();
+
+        List<String> names = new ArrayList<>();
+        names.add(scoreForm.getName1());
+        names.add(scoreForm.getName2());
+        names.add(scoreForm.getName3());
+        names.add(scoreForm.getName4());
+        names.add(scoreForm.getName5());
+        names.add(scoreForm.getName6());
+
+        List<String> listCards = new ArrayList<>();
+        listCards.add(0,"Zero used");
+        listCards.add(1,"1-2 used");
+        listCards.add(2,"3-5 used");
+        listCards.add(3,"6-10 used");
+        listCards.add(4,"> 10 used");
+
+        String help_cards = "error"; // this string value should never show in page
+        for(int i = 0; i < listCards.size(); i++){
+            if(i == scoreForm.getHelp_cards()){
+                help_cards = listCards.get(i);
+            }
+        }
+
+        model.addAttribute("help_cards", help_cards);
+        model.addAttribute("score", scoreForm);
+        model.addAttribute("names", names);
+        model.addAttribute("scores", scoreFormList);
+
+        return "viewDetails";
     }
 
     @GetMapping("viewAllScores")

@@ -63,8 +63,7 @@ insert into `users_roles` (`user_id`, `role_id`) VALUES
 insert into `score_form` (`name_one`, `name_two`, `name_three`, 
 						`name_four`, `name_five`, `name_six`, 
                         `activity_name`, `completion_date`, `completion_time`, `help_cards`, `stars`, `user_id`) values
-                        ('Maggie','Willy','Lochness','galager','shelby','mommy','adandon cabin', '2022-11-11', 136, 3, 2, 1),
-                        ('chris','ellen','becky','john','chooley','penny','adandon cabin', '2022-11-11', 136, 3, 2, 2);
+                        ('Chris','Ellen','Becky','','','','Adandon Cabin', '2022-11-12', 136, 3, 2, 2);
 
 use cabin_app;
 select * from score_form;

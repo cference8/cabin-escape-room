@@ -1,8 +1,10 @@
 package com.cf.cabinescaperoom.controllers;
 
 import com.cf.cabinescaperoom.models.Role;
+import com.cf.cabinescaperoom.models.ScoreForm;
 import com.cf.cabinescaperoom.models.User;
 import com.cf.cabinescaperoom.service.RoleService;
+import com.cf.cabinescaperoom.service.ScoreFormService;
 import com.cf.cabinescaperoom.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,11 +26,16 @@ public class AdminController {
     RoleService roleService;
 
     @Autowired
+    ScoreFormService scoreFormService;
+
+    @Autowired
     PasswordEncoder encoder;
 
     @GetMapping("/admin")
-    public String displayAdminPage(Model m) {
-        m.addAttribute("users", userService.getAllUsers());
+    public String displayAdminPage(Model model) {
+        List<ScoreForm> scoreFormList = scoreFormService.getAll();
+        model.addAttribute("scores", scoreFormList);
+        model.addAttribute("users", userService.getAllUsers());
         return "admin";
     }
 
@@ -59,6 +66,15 @@ public class AdminController {
     public String deleteUser(Integer id) {
 
         userService.deleteUser(id);
+
+        return "redirect:/admin";
+
+    }
+
+    @PostMapping("/deleteScoreForm")
+    public String deleteScoreForm(Integer id) {
+
+        scoreFormService.deleteScoreForm(id);
 
         return "redirect:/admin";
 

@@ -81,31 +81,70 @@
 
   <main class="px-3">
     <div>
-        <table class="table bg-info">
-            <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Name</th>
-                <th scope="col">Date</th>
-                <th scope="col">Time</th>
-                <th scope="col">Stars</th>
-                <th scope="col">Details</th>
-                <th scope="col">Edit</th>
+      <div class="row m-4 pb-3 bg-dark">
+        <div class="pt-5"></div>
+        <div class="col-6 text-right"><strong>#</strong></div>
+        <div class="col-6 text-left">
+          <span th:text="${score.id}">display rank</span>
+        </div>
 
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="currentScore : ${scores}">
-                <th scope="row" th:text="${currentScore.id}"></th>
-                <td th:text="${currentScore.name1}"></td>
-                <td th:text="${#temporals.format(currentScore.completion_date, 'MMM-dd-yyyy')}"></td>
-                <td th:text="${currentScore.minutes}"></td>
-                <td th:text="${currentScore.stars}"></td>
-                <td><a href="#" th:href="@{/viewDetails(id=${currentScore.id})}">Details</a></td>
-                <td><a href="#" th:href="@{/editScoreForm(id=${currentScore.id})}">Edit</a></td>
-            </tr>
-            </tbody>
-        </table>
+        <div class="col-6 text-right"><strong>Name</strong></div>
+        <div class="col-6 text-left">
+          <span th:text="${score.activity_name}">display activity</span>
+        </div>
+
+        <div class="col-6 text-right"><strong>Date</strong></div>
+        <div class="col-6 text-left">
+          <span th:text="${#temporals.format(score.completion_date, 'MMM-dd-yyyy')}">display date</span>
+        </div>
+        <div class="col-6 text-right"><strong>Time</strong></div>
+        <div class="col-6 text-left">
+                    <span th:text="${score.minutes}">display time</span>
+        </div>
+        <div class="col-6 text-right"><strong>Help Cards</strong></div>
+        <div class="col-6 text-left">
+          <span th:text="${help_cards}">display Help Cards</span>
+        </div>
+        <div class="col-6 text-right"><strong>Stars</strong></div>
+        <div class="col-6 text-left">
+          <span th:text="${score.stars}">display stars</span>
+        </div>
+        <div class="col-6 text-right"><strong>Participants</strong></div>
+        <div class="col-6 text-left">
+                    <span th:each="name : ${names}">
+                        <span th:text="${name}">
+                            display name of participant</span><br/>
+                    </span>
+        </div>
+        <a href="viewAllScores" class="btn btn-primary">Remove Details</a>
+      </div>
+    </div>
+    <div>
+      <table class="table bg-info">
+        <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Name</th>
+          <th scope="col">Date</th>
+          <th scope="col">Time</th>
+          <th scope="col">Stars</th>
+          <th scope="col">Details</th>
+          <th scope="col">Edit</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="currentScore : ${scores}">
+          <th scope="row" th:text="${currentScore.id}"></th>
+          <td th:text="${currentScore.name1}"></td>
+          <td th:text="${#temporals.format(currentScore.completion_date, 'MMM-dd-yyyy')}"></td>
+          <td th:text="${currentScore.minutes}"></td>
+          <td th:text="${currentScore.stars}"></td>
+          <td><a href="#" th:href="@{/scoreDetail(id=${currentScore.id})}">Details</a></td>
+          <td><a href="#" th:href="@{/editScoreForm(id=${currentScore.id})}">Edit</a></td>
+        </tr>
+        </tbody>
+      </table>
     </div>
   </main>
 
