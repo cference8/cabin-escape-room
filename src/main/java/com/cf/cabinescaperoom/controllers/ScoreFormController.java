@@ -1,12 +1,16 @@
 package com.cf.cabinescaperoom.controllers;
 
 
+import com.cf.cabinescaperoom.config.oAuth.CustomOAuth2User;
 import com.cf.cabinescaperoom.models.ScoreForm;
 import com.cf.cabinescaperoom.models.User;
 import com.cf.cabinescaperoom.service.ScoreFormService;
 import com.cf.cabinescaperoom.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +18,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class ScoreFormController {
@@ -26,24 +32,17 @@ public class ScoreFormController {
     UserService userService;
 
     @GetMapping("form")
-    public String displayScoreForm(Model model) {
+    public String displayTestScoreForm(Model model) {
         List<ScoreForm> scoreFormList = service.getAll();
         model.addAttribute("scores", scoreFormList);
         return "form";
     }
 
     @GetMapping("scoreForm")
-    public String displayScoreForm() {
-        return "scoreForm";
-    }
+    public String displayScoreForm(Model model) {return "scoreForm";}
 
     @PostMapping("addScoreForm")
     public String addScoreForm(HttpServletRequest request) {
-
-        // Get user information from session
-        org.springframework.security.core.userdetails.User user = (org.springframework.security.core.userdetails.User) SecurityContextHolder
-                .getContext().getAuthentication().getPrincipal();
-        User scoreFormUser = userService.getUserByUsername(user.getUsername());
 
         String name1 = request.getParameter("name1");
         String name2 = request.getParameter("name2");
@@ -67,7 +66,23 @@ public class ScoreFormController {
         scoreForm.setCompletion_date(date);
         scoreForm.setMinutes(minutes);
         scoreForm.setHelp_cards(help_cards);
-        scoreForm.setUser(scoreFormUser);
+
+        User user;
+        CustomOAuth2User oAuthUser = null;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication.getAuthorities().size() > 2){
+            oAuthUser = (CustomOAuth2User) authentication.getPrincipal();
+            if(oAuthUser != null) {
+                user = userService.getUserByUsername(oAuthUser.getEmail());
+                scoreForm.setUser(user);
+            }
+        } else {
+            org.springframework.security.core.userdetails.User localUser = (org.springframework.security.core.userdetails.User) SecurityContextHolder
+                    .getContext().getAuthentication().getPrincipal();
+            User scoreFormUser = userService.getUserByUsername(localUser.getUsername());
+            scoreForm.setUser(scoreFormUser);
+        }
+
 
         service.addScoreForm(scoreForm);
 
@@ -78,6 +93,15 @@ public class ScoreFormController {
     public String editScoreForm(HttpServletRequest request, Model model) {
         int id = Integer.parseInt(request.getParameter("id"));
         ScoreForm scoreForm = service.getById(id);
+
+        Map<Integer, String> helpCards = new HashMap<>();
+        helpCards.put( 0, " No Help Cards");
+        helpCards.put( 1, " 1-2 Help Cards");
+        helpCards.put( 2, " 3-5 Help Cards");
+        helpCards.put( 3, " 6-10 Help Cards");
+        helpCards.put( 4, " > 10 Help Cards");
+
+        model.addAttribute("helpCards", helpCards.entrySet());
         model.addAttribute("scoreForm", scoreForm);
         return "editScoreForm";
     }
@@ -85,11 +109,21 @@ public class ScoreFormController {
     @PostMapping("editScoreForm")
     public String preformEditScoreForm(ScoreForm scoreForm) {
 
-        org.springframework.security.core.userdetails.User user = (org.springframework.security.core.userdetails.User) SecurityContextHolder
-                .getContext().getAuthentication().getPrincipal();
-        User scoreFormUser = userService.getUserByUsername(user.getUsername());
-
-        scoreForm.setUser(scoreFormUser);
+        User user;
+        CustomOAuth2User oAuthUser = null;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication.getAuthorities().size() > 2){
+            oAuthUser = (CustomOAuth2User) authentication.getPrincipal();
+            if(oAuthUser != null) {
+                user = userService.getUserByUsername(oAuthUser.getEmail());
+                scoreForm.setUser(user);
+            }
+        } else {
+            org.springframework.security.core.userdetails.User localUser = (org.springframework.security.core.userdetails.User) SecurityContextHolder
+                    .getContext().getAuthentication().getPrincipal();
+            user = userService.getUserByUsername(localUser.getUsername());
+            scoreForm.setUser(user);
+        }
 
         service.editScoreForm(scoreForm);
 
@@ -117,12 +151,18 @@ public class ScoreFormController {
         listCards.add(4,"> 10 used");
 
         String help_cards = "error"; // this string value should never show in page
+        // create help cards under HTML selected element
         for(int i = 0; i < listCards.size(); i++){
             if(i == scoreForm.getHelp_cards()){
                 help_cards = listCards.get(i);
             }
         }
-
+        //  create a ranking order by # of stars
+        int i = 1;
+        for(ScoreForm item : scoreFormList){
+            item.setRank(i);
+            i++;
+        }
         model.addAttribute("help_cards", help_cards);
         model.addAttribute("score", scoreForm);
         model.addAttribute("names", names);
@@ -133,8 +173,14 @@ public class ScoreFormController {
 
     @GetMapping("viewAllScores")
     public String viewAllScores(Model model) {
-
         List<ScoreForm> scoreFormList = service.getAll();
+        
+        // create a ranking ordered by # of stars
+        int i = 1;
+        for(ScoreForm item : scoreFormList){
+            item.setRank(i);
+            i++;
+        }
         model.addAttribute("scores", scoreFormList);
 
         return "viewScores";

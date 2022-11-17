@@ -38,6 +38,10 @@
         font-size: 3.5rem;
       }
     }
+
+    @media (min-width: 320px) {
+
+    }
   </style>
 
 
@@ -54,7 +58,7 @@
         <nav class="nav nav-masthead justify-content-center float-md-end">
           <a class="nav-link active" aria-current="page" href="home">Home</a>
           <a class="nav-link" href="scoreForm">Score Form</a>
-          <a class="nav-link" href="#">Contact</a>
+          <a class="nav-link" href="https://chrisference-portfolio.com/contact.html" target="_blank">Contact</a>
           <a class="nav-link" href="admin" sec:authorize="hasRole('ROLE_ADMIN')">Admin</a>
         </nav>
       </div>
@@ -80,25 +84,33 @@
         <table class="table bg-info">
           <thead>
             <tr>
-              <th scope="col">#</th>
+              <th scope="col">Rank # </th>
+              <th scope="col">Stars</th>
               <th scope="col">Name</th>
               <th scope="col">Date</th>
               <th scope="col">Time</th>
-              <th scope="col">Stars</th>
               <th scope="col">Details</th>
               <th scope="col">Edit</th>
-
+              <th scope="col" sec:authorize="hasRole('ROLE_ADMIN')">Delete</th>
             </tr>
           </thead>
           <tbody>
             <tr th:each="currentScore : ${scores}">
-              <th scope="row" th:text="${currentScore.id}"></th>
+              <th scope="row" th:text="${currentScore.rank}"></th>
+              <td th:text="${currentScore.stars}"></td>
               <td th:text="${currentScore.name1}"></td>
               <td th:text="${#temporals.format(currentScore.completion_date, 'MMM-dd-yyyy')}"></td>
-              <td th:text="${currentScore.minutes}"></td>
-              <td th:text="${currentScore.stars}"></td>
+              <td th:text="${currentScore.minutes}+' min.'"></td>
               <td><a href="#" th:href="@{/viewDetails(id=${currentScore.id})}">Details</a></td>
               <td><a href="#" th:href="@{/editScoreForm(id=${currentScore.id})}">Edit</a></td>
+              <td sec:authorize="hasRole('ROLE_ADMIN')">
+                <form class="form-inline" method="POST" action="/deleteScoreForm">
+                  <input type="hidden" th:name="${_csrf.parameterName}"
+                         th:value="${_csrf.token}" />
+                  <input type="hidden" name="id" th:value="${currentScore.id}" />
+                  <button class="btn btn-link btn-xs" type="submit">Delete</button>
+                </form>
+              </td>
             </tr>
           </tbody>
         </table>

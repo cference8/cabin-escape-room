@@ -52,8 +52,8 @@
                 <!-- Nav Bar -->
                 <nav class="nav nav-masthead justify-content-center float-md-end">
                     <a class="nav-link" href="home">Home</a>
-                    <a class="nav-link active" aria-current="page" href="scoreForm">Score Form</a>
-                    <a class="nav-link" href="#">Contact</a>
+                    <a class="nav-link active" aria-current="page" href="scoreForm">Add Score</a>
+                    <a class="nav-link" href="https://chrisference-portfolio.com/contact.html" target="_blank">Contact</a>
                     <a class="nav-link" href="admin" sec:authorize="hasRole('ROLE_ADMIN')">Admin</a>
                 </nav>
 
@@ -123,7 +123,7 @@
                         <legend class="w-auto">Group Info</legend>
                         <div class="col-6 mx-auto">
                             <div class="row">
-                                <label for="activity">Activity Name<span>*</span></label>
+                                <label for="activity">Game Name<span>*</span></label>
                                 <input id="activity" type="text" name="activity_name"
                                     th:value="${scoreForm.activity_name}" class="form-control" required />
                             </div>
@@ -139,13 +139,13 @@
                             </div>
                             <div class="row">
                                 <p>Number of help cards used</p>
-                                <select type="dropdown" name="help_cards" th:value="${scoreForm.help_cards}"
-                                    class="form-control" required>
-                                    <option value="0">No cards</option>
-                                    <option value="1">1-2 cards</option>
-                                    <option value="2">3-5 cards</option>
-                                    <option value="3">6-10 cards</option>
-                                    <option value="4"> > 10 cards</option>
+                                <select type="dropdown" name="help_cards"
+                                        class="form-control" required>
+                                    <option th:each="card : ${helpCards}"
+                                            th:value="${card.key}"
+                                            th:text="${card.value}"
+                                            th:selected="${scoreForm.help_cards == card.key}"
+                                    >Help Cards</option>
                                 </select>
                             </div>
 

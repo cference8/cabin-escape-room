@@ -20,6 +20,9 @@ public class ScoreForm {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Transient
+    private int rank;
+
     @Column(name = "name_one")
     private String name1;
     @Column(name = "name_two")

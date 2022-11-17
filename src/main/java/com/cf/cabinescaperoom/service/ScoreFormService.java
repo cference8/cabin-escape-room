@@ -3,6 +3,7 @@ package com.cf.cabinescaperoom.service;
 import com.cf.cabinescaperoom.models.ScoreForm;
 import com.cf.cabinescaperoom.repositories.ScoreFormRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,7 +37,6 @@ public class ScoreFormService {
     }
 
     public void editScoreForm(ScoreForm scoreForm) {
-        ScoreForm update = repo.findById(scoreForm.getId()).orElse(null);
         int stars;
 
         if (scoreForm.getMinutes() < 60) {
@@ -52,24 +52,7 @@ public class ScoreFormService {
             stars = greaterThanOneTwenty(scoreForm);
             scoreForm.setStars(stars);
         }
-
-        if (update != null) {
-            update.setName1(scoreForm.getName1());
-            update.setName2(scoreForm.getName2());
-            update.setName2(scoreForm.getName3());
-            update.setName2(scoreForm.getName4());
-            update.setName2(scoreForm.getName5());
-            update.setName2(scoreForm.getName6());
-            update.setActivity_name(scoreForm.getActivity_name());
-            update.setCompletion_date(scoreForm.getCompletion_date());
-            update.setMinutes(scoreForm.getMinutes());
-            update.setHelp_cards(scoreForm.getHelp_cards());
-            update.setStars(scoreForm.getStars());
-            repo.save(update);
-        } else {
-            repo.save(scoreForm);
-        }
-
+        repo.save(scoreForm);
     }
 
     public void deleteScoreForm(long id){
@@ -81,7 +64,7 @@ public class ScoreFormService {
     }
 
     public List<ScoreForm> getAll() {
-        return (List<ScoreForm>) repo.findAll();
+        return repo.findAll(Sort.by(Sort.Direction.DESC, "stars"));
     }
 
     private int greaterThanOneTwenty(ScoreForm formData) {
