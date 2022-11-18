@@ -24,7 +24,7 @@ spring:
   mail:
     host: smtp.gmail.com
     username: cabin.escape.room.web.app@gmail.com
-    password: evmskeqfqepgnbet
+    password: GMAIL SECRET
     port: 587
     properties:
       mail:

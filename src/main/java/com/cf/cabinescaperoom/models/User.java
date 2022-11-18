@@ -2,6 +2,7 @@ package com.cf.cabinescaperoom.models;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -10,6 +11,7 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 @Getter @Setter @EqualsAndHashCode
+@NoArgsConstructor
 public class User {
 
     @Id
@@ -51,4 +53,5 @@ public class User {
 
     @Column(name = "reset_password_token")
     private String resetPasswordToken;
+
 }

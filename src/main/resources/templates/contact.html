@@ -16,9 +16,26 @@
 
   <link rel="stylesheet" type="text/css" th:href="@{../contact-style/css/main.css}">
 
+  <style>
+    .clear-css {
+      all: initial;
+      font-family: 'Oswald', sans-serif;
+      font-size: 3rem;
+    }
+
+    .clear-css * {
+      all: unset
+      font-family: 'Oswald', sans-serif;
+      font-size: 3rem;
+    }
+  </style>
+
 </head>
 
 <body>
+  <div class="container">
+    <h1 class="text-center border border-dark" href="home"><a class="clear-css" href="home">Cabin Escape Room</a></h1>
+  </div>
   <div class="container-contact100">
     <div class="wrap-contact100">
       <form action="sendEmail" method="post" class="contact100-form validate-form">

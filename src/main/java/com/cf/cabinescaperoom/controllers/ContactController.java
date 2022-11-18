@@ -173,5 +173,4 @@ public class ContactController {
         mailSender.send(message);
     }
 
-
 }

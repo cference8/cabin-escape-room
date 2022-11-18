@@ -6,6 +6,7 @@ import com.cf.cabinescaperoom.models.ScoreForm;
 import com.cf.cabinescaperoom.models.User;
 import com.cf.cabinescaperoom.service.ScoreFormService;
 import com.cf.cabinescaperoom.service.UserService;
+import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -56,21 +57,25 @@ public class ScoreFormController {
         int help_cards = Integer.parseInt(request.getParameter("help_cards"));
 
         ScoreForm scoreForm = new ScoreForm();
-        scoreForm.setName1(name1);
-        scoreForm.setName2(name2);
-        scoreForm.setName3(name3);
-        scoreForm.setName4(name4);
-        scoreForm.setName5(name5);
-        scoreForm.setName6(name6);
-        scoreForm.setActivity_name(activity_name);
-        scoreForm.setCompletion_date(date);
-        scoreForm.setMinutes(minutes);
-        scoreForm.setHelp_cards(help_cards);
+        if(!Strings.isNullOrEmpty(name1) && !Strings.isNullOrEmpty(name2) && !Strings.isNullOrEmpty(name3)
+            && !Strings.isNullOrEmpty(activity_name) && !Strings.isNullOrEmpty(request.getParameter("minutes"))
+        && !Strings.isNullOrEmpty(request.getParameter("help_cards"))) {
+            scoreForm.setName1(name1);
+            scoreForm.setName2(name2);
+            scoreForm.setName3(name3);
+            scoreForm.setName4(name4);
+            scoreForm.setName5(name5);
+            scoreForm.setName6(name6);
+            scoreForm.setActivity_name(activity_name);
+            scoreForm.setCompletion_date(date);
+            scoreForm.setMinutes(minutes);
+            scoreForm.setHelp_cards(help_cards);
+        }
 
         User user;
         CustomOAuth2User oAuthUser = null;
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(authentication.getAuthorities().size() > 2){
+        if(authentication.getAuthorities().size() > 2){ // Best way I could think of to check if oAuth2User
             oAuthUser = (CustomOAuth2User) authentication.getPrincipal();
             if(oAuthUser != null) {
                 user = userService.getUserByUsername(oAuthUser.getEmail());

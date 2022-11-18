@@ -52,12 +52,12 @@
                     </a>
                 </li>
                 <li role="presentation" class="nav-item">
-                    <a class="nav-link active" href="viewAllScores">
+                    <a class="nav-link" href="viewAllScores">
                         View-All-Scores
                     </a>
                 </li>
                 <li role="presentation" class="nav-item">
-                    <a class="nav-link active" href="https://chrisference-portfolio.com/contact.html">
+                    <a class="nav-link" href="contact">
                         Contact
                     </a>
                 </li>
@@ -140,7 +140,7 @@
                             <tr>
                                 <td th:text="${currentScore.id}">ID</td>
                                 <td th:text="${currentScore.name1}">name</td>
-                                <td th:text="${currentScore.completion_date}">date</td>
+                                <td th:text="${#temporals.format(currentScore.completion_date, 'MMM-dd-yyyy')}">date</td>
                                 <td th:text="${currentScore.minutes}">minutes</td>
                                 <td th:text="${currentScore.stars}">stars</td>
                                 <td><a href="#" th:href="@{/editScoreFormDetails(id=${currentScore.id})}">Details</a>

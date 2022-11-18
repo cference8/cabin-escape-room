@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -66,19 +67,7 @@ public class LoginController {
 
     @GetMapping("/createAccount")
     public String createAccount(Model model) {
-        User blankUser = new User();
-        blankUser.setId(0L);
-        blankUser.setUsername("");
-        blankUser.setFirstName("");
-        blankUser.setLastName("");
-        blankUser.setPassword("");
-        blankUser.setPhoneNumber("");
-        Set<Role> roles = new HashSet<>();
-        Role blankRole = new Role();
-        roles.add(blankRole);
-        blankUser.setRoles(roles);
-
-        model.addAttribute("user", blankUser);
+        model.addAttribute("user", new User());
         model.addAttribute("errors", violations);
         return "createAccount";
     }
@@ -97,7 +86,7 @@ public class LoginController {
                 user.setRoles(userRoles);
 
                 if (!userService.existsByUsername(user.getUsername())) {
-                    if(user.getPassword() != null){
+                    if(user.getPassword() != null && !user.getPassword().equals("") && user.getPassword().length() >= 6){
                         user.setPassword(encoder.encode(user.getPassword()));
                         user.setEnabled(true);
                         userService.createUser(user);
