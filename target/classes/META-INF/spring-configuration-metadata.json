@@ -1,0 +1,32 @@
+{
+  "groups": [
+    {
+      "name": "secret",
+      "type": "com.cf.cabinescaperoom.config.SecretsConfigProperties",
+      "sourceType": "com.cf.cabinescaperoom.config.SecretsConfigProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "secret.driver-class-name",
+      "type": "java.lang.String",
+      "sourceType": "com.cf.cabinescaperoom.config.SecretsConfigProperties"
+    },
+    {
+      "name": "secret.password",
+      "type": "java.lang.String",
+      "sourceType": "com.cf.cabinescaperoom.config.SecretsConfigProperties"
+    },
+    {
+      "name": "secret.url",
+      "type": "java.lang.String",
+      "sourceType": "com.cf.cabinescaperoom.config.SecretsConfigProperties"
+    },
+    {
+      "name": "secret.username",
+      "type": "java.lang.String",
+      "sourceType": "com.cf.cabinescaperoom.config.SecretsConfigProperties"
+    }
+  ],
+  "hints": []
+}
