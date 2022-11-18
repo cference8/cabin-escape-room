@@ -21,3 +21,14 @@ spring:
             scope:
               - user:email
               - read:user
+  mail:
+    host: smtp.gmail.com
+    username: cabin.escape.room.web.app@gmail.com
+    password: evmskeqfqepgnbet
+    port: 587
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true

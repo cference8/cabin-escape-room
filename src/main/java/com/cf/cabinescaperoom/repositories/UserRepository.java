@@ -17,4 +17,9 @@ public interface UserRepository extends CrudRepository<User, Long> {
     @Modifying
     @Query("UPDATE User u SET u.provider = ?2 WHERE u.username = ?1")
     void updateProvider(String username, Provider provider);
+
+    @Query("SELECT u from User u WHERE u.email = :email")
+    User findByEmail(@Param("email") String email);
+
+    User findByResetPasswordToken(String token);
 }

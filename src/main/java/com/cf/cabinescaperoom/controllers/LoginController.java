@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolation;
-import javax.validation.Valid;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -32,7 +32,7 @@ public class LoginController {
     RoleService roleService;
 
     @Autowired
-    PasswordEncoder encoder;
+    BCryptPasswordEncoder encoder;
 
     Set<ConstraintViolation<User>> violations = new HashSet<>();
 
@@ -84,7 +84,7 @@ public class LoginController {
     }
 
     @PostMapping("/createAccount")
-    public String createAccount(@Valid User user, BindingResult result, Model model) {
+    public String createAccount(User user, BindingResult result, Model model) {
         if (result.hasErrors()) {
 
             model.addAttribute("user", user);
@@ -99,6 +99,7 @@ public class LoginController {
                 if (!userService.existsByUsername(user.getUsername())) {
                     if(user.getPassword() != null){
                         user.setPassword(encoder.encode(user.getPassword()));
+                        user.setEnabled(true);
                         userService.createUser(user);
                     } else {
                         FieldError error = new FieldError("user", "password", "Password must contain at least 6 characters");

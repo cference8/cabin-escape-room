@@ -13,7 +13,17 @@ create table `users`(
 `last_name` varchar(50),
 `phone_number` varchar(15),
 `enabled` boolean DEFAULT 1,
-`provider` varchar(15)
+`provider` varchar(15),
+`reset_password_token` varchar(30)
+);
+
+create table `contact` (
+	`id` bigint primary key auto_increment,
+	`name` varchar(75),
+    `phone` varchar(15),
+    `email` varchar(100),
+    `comments` varchar(255),
+    `copy-email` boolean
 );
 
 create table `roles` (
@@ -49,7 +59,7 @@ create table `users_roles` (
 
 insert into `users`(`username`,`password`,`enabled`, first_name, last_name, email, phone_number)	VALUES
 					("admin", "$2a$10$Vy90.sVNbgPNuuocZ3TEgu35CKYdkv8xmYl294ge7pd9PWSRT3qnG", 1,'Chris', 'Ference', 'cference8@gmail.com', '952-826-9152'),
-					("circlepines", "$2a$10$C379XVnNCJ9YuxP/bniu.u12e37cYRKC47nxfa7C6qsQvXC7C93vu", 1, 'Cabin', 'House', 'beckheds@mynixplay.com', '952-270-9353');
+					("circlepines", "$2a$10$C379XVnNCJ9YuxP/bniu.u12e37cYRKC47nxfa7C6qsQvXC7C93vu", 1, 'Cabin', 'House', 'cabin.escape.room.web.app@gmail.com', '952-270-9353');
 
 insert into `roles` (`name`) VALUES
 				('ROLE_ADMIN'),
@@ -66,4 +76,6 @@ insert into `score_form` (`name_one`, `name_two`, `name_three`,
                         ('Chris','Ellen','Becky','','','','Adandon Cabin', '2022-11-12', 136, 3, 2, 2);
 
 use cabin_app;
-select * from score_form;
+select * from Users WHERE Users.email = "cference8@gmail.com";
+select * from users;
+

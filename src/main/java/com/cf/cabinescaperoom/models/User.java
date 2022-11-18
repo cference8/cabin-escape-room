@@ -48,4 +48,7 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private Provider provider;      // Facebook and Google login
+
+    @Column(name = "reset_password_token")
+    private String resetPasswordToken;
 }
